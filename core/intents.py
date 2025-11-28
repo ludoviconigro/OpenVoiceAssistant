@@ -1,13 +1,18 @@
 # core/intents.py
 
 from skills.weather import handle_weather_query
+from skills.calculator import handle_calculator
+
+# importa tutte le liste delle parole chiave
+from core.keywords import (
+    calc_keywords,
+    weather_keywords,
+    greetings_keywords
+)
 
 
 def clean_text(text):
-    """
-    Rimuove parole duplicate consecutive tipo:
-    'roma roma' → 'roma'
-    """
+    """Rimuove duplicati consecutivi tipo 'roma roma' → 'roma'."""
     words = text.split()
     cleaned = []
     for w in words:
@@ -17,27 +22,34 @@ def clean_text(text):
 
 
 def handle_command(text: str) -> str:
-    """
-    Analisi base dell'intento.
-    """
     text = text.lower().strip()
     text = clean_text(text)
 
-    # Intent saluti
-    if any(k in text for k in ["ciao", "grazie", "ok", "ehi", "hey"]):
+    # ============================================================
+    # SALUTI
+    # ============================================================
+    if any(w in text for w in greetings_keywords):
         return "Dimmi pure, sono qui."
 
-    # Intent METEO
-    if any(k in text for k in [
-        "tempo", "meteo", "clima",
-        "piove", "pioggia",
-        "neve", "nevica",
-        "vento", "ventoso",
-        "fa caldo", "fa freddo",
-        "percepita"
-    ]):
+    # ============================================================
+    # METEO
+    # ============================================================
+    if any(w in text for w in weather_keywords):
         return handle_weather_query(text)
 
+    # ============================================================
+    # CALCOLATRICE
+    # ============================================================
+    if any(k in text for k in calc_keywords):
+        return handle_calculator(text)
+
+    # simboli matematici → calcolatrice
+    if any(c in text for c in "+-*/^()"):
+        return handle_calculator(text)
+
+    # ============================================================
+    # NESSUN INTENTO RICONOSCIUTO
+    # ============================================================
     if text == "":
         return "Non ho capito, puoi ripetere?"
 
