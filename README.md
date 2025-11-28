@@ -1,75 +1,152 @@
-# 📘 **README.md** — *OpenVoiceAssistant*
+# 📘 OpenVoiceAssistant
 
-```markdown
-# 🎤 OpenVoiceAssistant  
-Un assistente vocale modulare, open-source e completamente locale.  
-Gestisce comandi vocali, meteo, automazioni e nuove skill personalizzate.
+Assistente Vocale Locale con Moduli Espandibili
 
+## 🧠 Cos’è OpenVoiceAssistant
 
+**OpenVoiceAssistant** è un assistente vocale modulare e completamente locale sviluppato in Python.
+È progettato per rispondere a comandi in linguaggio naturale, funzionare in tempo reale e garantire la massima privacy possibile.
+Il sistema permette di aggiungere facilmente nuove funzionalità tramite moduli dedicati (“skills”).
 
-## 🧩 Aggiungere nuove skill
+---
 
-1. Crea un file in `/skills/`:
+## 💻 Ambiente di Sviluppo
 
-```python
-def handle_timer(text):
-    return "Timer avviato!"
+Il progetto viene attualmente sviluppato su:
+
+* **MacBook Air**
+* macOS
+* Python (in ambiente virtuale `venv`)
+* Sistema audio integrato (microfono + output vocale)
+
+Funziona correttamente anche su macchine leggere, senza GPU, grazie all’uso di librerie offline per voce e parsing.
+
+---
+
+## 🎯 Cosa può fare l’assistente
+
+L’assistente è basato su un sistema di **intenti**: ogni richiesta viene interpretata e instradata verso la “skill” più adatta.
+
+Attualmente sono disponibili:
+
+### 🔢 Modulo **Calcolatrice Avanzata**
+
+Gestisce operazioni matematiche di varia complessità, usando linguaggio naturale o simbolico.
+Include funzioni matematiche, conversioni, costanti e combinatoria.
+➡️ Questo modulo è progettato per essere espandibile con facilità.
+
+### 🌦️ Modulo **Meteo**
+
+Il modulo meteo fornisce informazioni meteorologiche attuali:
+
+* nella tua **posizione geografica automatica**, ottenuta localmente
+* oppure per una città indicata nella richiesta
+
+➡️ Anche questo modulo è estendibile (previsioni, allerte, ecc.).
+
+### 🗣️ Sistema **Vocale**
+
+* riconoscimento vocale locale
+* sintesi vocale delle risposte
+* interazione continua
+
+---
+
+## 🧪 Sistema di Test Integrato
+
+Il progetto include un sistema automatico di test per verificare ogni skill.
+
+### 📁 File di test
+
+I file si trovano nella cartella:
+
+```
+tests/
+   tests_calcolatrice.txt
+   tests_meteo.txt
 ```
 
-2. Importalo in `core/intents.py`:
+Ogni file contiene una lista di frasi, una per riga.
 
-```python
-from skills.timer import handle_timer
+### 🔧 Script di test
+
+Lo script è:
+
+```
+run_tests.py
 ```
 
-3. Associa le parole chiave:
+ed è nella stessa directory di `main.py`.
 
-```python
-if "timer" in text:
-    return handle_timer(text)
+### ▶️ Come eseguire i test
+
+Puoi eseguire i test in base al modulo che vuoi verificare:
+
+```
+python main.py --test calcolatrice
 ```
 
-Ed è subito attiva 🔥
+oppure:
+
+```
+python main.py --test meteo
+```
+
+Il programma selezionerà automaticamente il file nella cartella `tests/`.
 
 ---
 
-## 🌍 API e Servizi Gratuiti Utilizzati
+## 🚀 Come si avvia l’assistente
 
-* **Open-Meteo Geocoding API**
-* **MET Norway Weather API**
-* **ipapi.co + ipwho.is** per localizzazione IP
-* **SpeechRecognition + sounddevice**
-* **pyttsx3** per TTS locale
+### ▶️ Modalità Assistente Vocale
 
-Tutto totalmente gratuito e senza limiti.
+```
+python main.py
+```
 
----
+Avvierà l’ascolto tramite microfono e risponderà vocalmente.
 
-## 💡 Perché OpenVoiceAssistant?
+### ▶️ Modalità Test
 
-✔ 100% gratuito
-✔ Modulare come Alexa
-✔ Estendibile con nuove skill
-✔ Ottimizzato per Mac ARM
-✔ Nessun servizio a pagamento
-✔ Nessun cloud obbligatorio
+```
+python main.py --test <nome_test>
+```
 
----
+Esempi:
 
-## 🤝 Contributi
-
-Pull-request, idee e nuove skill sono benvenute!
+* `python main.py --test calcolatrice`
+* `python main.py --test meteo`
 
 ---
 
-## 📜 Licenza
+## 📂 Struttura del progetto
 
-MIT License — libero uso, modifica e distribuzione.
+```
+core/
+   intents.py          → sistema di riconoscimento degli intenti
+   keywords.py         → parole chiave per la classificazione
+   voice.py            → input/output vocale
+skills/
+   calculator.py       → modulo calcolatrice
+   weather.py          → modulo meteo
+   location.py         → gestione posizione
+tests/
+   tests_calcolatrice.txt
+   tests_meteo.txt
+config.py
+main.py
+run_tests.py
+```
 
 ---
 
-## 👤 Autore
+## 🏁 Stato del progetto
 
-**Ludovico Nigro**
-Etical Hacker & Developer
+✔ Architettura modulare
+✔ Skills principali funzionanti
+✔ Gestione vocale stabile
+✔ Sistema test configurato
+✔ Facilmente espandibile
+
+---
 
